@@ -1,0 +1,48 @@
+version: '3'
+services:
+    nginx:
+        restart: always
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./nginx
+        ports:
+            - '3050:80'
+    postgres:
+        image: 'postgres:latest'
+    redis:
+        image: 'redis:latest'
+    server:
+        build: 
+            dockerfile: Dockerfile.dev
+            context: ./server
+        volumes: 
+            #Don't link/copy node_modules. So we dont have to rebuild
+            - /usr/app/complex-server/node_modules
+            - ./server:/usr/app/complex-server
+        environment:
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+            - PGUSER=postgres
+            - PGHOST=postgres
+            - PGDATABASE=postgres
+            - PGPASSWORD=postgres_password
+            - PGPORT=5432
+        depends_on:
+            - postgres
+    client:
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./client
+        volumes:
+            - /usr/app/complex-client/node_modules
+            - ./client:/usr/app/complex-client
+    worker:
+        build:
+            dockerfile: Dockerfile.dev
+            context: ./worker
+        volumes:
+            - /usr/app/complex-worker/node_modules
+            - ./worker:/usr/app/complex-worker
+        environment:
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
