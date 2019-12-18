@@ -3,20 +3,20 @@ services:
     - docker
 
 before_install:
-    - docker build -t manjesh/complex-client-test -f ./client/Dockerfile.dev ./client
+    - docker build -t reachmanjesh/complex-client-test -f ./client/Dockerfile.dev ./client
 
 script:
-    - docker run -e CI=true manjesh/complex-client-test npm test
+    - docker run -e CI=true reachmanjesh/complex-client-test npm test
 
 after_success:
-    - docker build -t manjesh/complex-client ./client
-    - docker build -t manjesh/complex-nginx ./nginx
-    - docker build -t manjesh/complex-server ./server
-    - docker build -t manjesh/complex-worker ./worker
+    - docker build -t reachmanjesh/complex-client ./client
+    - docker build -t reachmanjesh/complex-nginx ./nginx
+    - docker build -t reachmanjesh/complex-server ./server
+    - docker build -t reachmanjesh/complex-worker ./worker
     # Login to Docker CLI
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
     # Take images and push to docker hub
-    - docker push manjesh/complex-client
-    - docker push manjesh/complex-nginx
-    - docker push manjesh/complex-server
-    - docker push manjesh/complex-worker
+    - docker push reachmanjesh/complex-client
+    - docker push reachmanjesh/complex-nginx
+    - docker push reachmanjesh/complex-server
+    - docker push reachmanjesh/complex-worker
