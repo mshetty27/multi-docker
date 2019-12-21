@@ -15,7 +15,7 @@ RUN npm run build
 
 #Run phase
 FROM nginx as runner
-EXPOSE 80
+EXPOSE 3000
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder  /usr/app/complex-client/build /usr/share/nginx/html
 #default command is starting nginx. so no need to give a command
